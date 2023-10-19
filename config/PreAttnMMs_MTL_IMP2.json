@@ -1,0 +1,120 @@
+{ 
+  "seed": 1111,
+  "experiment": {
+    "hp_tuning": false,
+    "test": false,
+    "btsp": false,
+    "visualize": true,
+    "type": "global",
+    "k_folds": 10,
+    "dataset_split_ratio": "811",
+    "evaluation": "multilabel classification",
+    "monitored_metric": "macro-f1"
+  },
+  "data": {
+    "kfold": 0,
+    "data_type": "tsdata",
+    "max_timestamp": 48,
+    "norm_type": "Standardization",
+    "data_dir": "data/Fuo/20230219",
+    "data_loc": "48hours/processed/raw/processed_data.npz",
+    "data_saved": "48hours/allready",
+    "hierarchy": "class.taxonomy"
+  },
+  "model": {
+    "type": "PreAttnMMs_MTL_IMP2",
+    "temporal_encoder": {
+      "num_layer": 1,
+      "layer1": {
+        "type": "GRUDs",
+        "rnn_hidden_size": 64,
+        "dropout_type": "mloss",
+        "dropout": 0.05
+      },
+      "layer2": {
+        "type": "GRU",
+        "rnn_hidden_size": 96,
+        "dropout": 0.25
+      }
+    },
+    "static_encoder": {
+      "type": "MLP",
+      "num_layer": 2,
+      "layer1": {
+        "dimension": 496,
+        "dropout": 0.4
+      },
+      "layer2": {
+        "dimension": 496,
+        "dropout": 0.15
+      }
+    },
+    "mtl_head_block": {
+      "head_num": 5,
+      "head0": {
+        "hidden_dim": 480,
+        "dropout": 0.25
+      },
+      "head1": {
+        "hidden_dim": 464,
+        "dropout": 0.25
+      },
+      "head2": {
+        "hidden_dim": 432,
+        "dropout": 0.25
+      },
+      "head3": {
+        "hidden_dim": 208,
+        "dropout": 0.3
+      },
+      "head4": {
+        "hidden_dim": 144,
+        "dropout": 0.25
+      }
+    }
+  },
+  "train": {
+    "batch_size": 64,
+    "start_epoch": 0,
+    "end_epoch": 150,
+    "optimizer": {
+      "type": "RMSprop",
+      "learning_rate": 0.000163084981073936,
+      "weight_decay": 7.68020770033342e-09
+    },
+    "early_stopping": {
+      "patience": 10
+    },
+    "device_setting": {
+      "device": "cuda",
+      "visible_device_list": "0",
+      "num_workers": 10
+    },
+    "checkpoint": {
+      "dir": "checkpoint"
+    }
+  },
+  "test": {
+    "results": {
+      "dir": "results"
+    }
+
+  },
+  "vocab": {
+    "dir": "vocab"
+  },
+  "logging": {
+    "use_mongo": true,
+    "dir": "logs",
+    "log": {
+      "mongo_host": "localhost",
+      "mongo_port": 27017,
+      "mongo_db": "sacred"
+    }
+  },
+  "logger": {
+    "level": "info",
+    "dir": "log"
+  }
+}
+

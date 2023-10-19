@@ -1,0 +1,108 @@
+{ 
+  "seed": 1111,
+  "experiment": {
+    "hp_tuning": false,
+    "test": false,
+    "btsp": true,
+    "visualize": false,
+    "type": "global",
+    "k_folds": 10,
+    "dataset_split_ratio": "811",
+    "evaluation": "multilabel classification",
+    "monitored_metric": "macro-f1"
+  },
+  "data": {
+    "kfold": 0,
+    "data_type": "tsdata",
+    "max_timestamp": 48,
+    "norm_type": "Standardization",
+    "data_dir": "data/Fuo/20230219",
+    "data_loc": "48hours/processed/raw/processed_data.npz",
+    "data_saved": "48hours/allready",
+    "hierarchy": "class.taxonomy"
+  },
+  "model": {
+    "type": "PreAttnMMs_GAT_IMP8_GC",
+    "temporal_encoder": {
+      "num_layer": 1,
+      "layer1": {
+        "type": "GRUDs",
+        "rnn_hidden_size": 96,
+        "dropout_type": "Gal",
+        "dropout": 0.5
+      },
+      "layer2": {
+        "type": "GRU",
+        "rnn_hidden_size": 160,
+        "dropout": 0.35
+      }
+    },
+    "static_encoder": {
+      "type": "MLP",
+      "num_layer": 2,
+      "layer1": {
+        "dimension": 400,
+        "dropout": 0.5
+      },
+      "layer2": {
+        "dimension": 496,
+        "dropout": 0.15
+      }
+    },
+    "gat_layer": {
+      "num_out_features": 80,
+      "num_of_heads": 7,
+      "is_concat": true,
+      "in_dropout": 0.15,
+      "out_dropout": 0.6,
+      "is_bias": false,
+      "is_add_skip_connection": false,
+      "is_gat_activation": false,
+      "log_attention_weights": false
+    }
+  },
+  "train": {
+    "batch_size": 64,
+    "start_epoch": 0,
+    "end_epoch": 150,
+    "optimizer": {
+      "type": "RMSprop",
+      "learning_rate": 0.00153213358904204,
+      "weight_decay": 3.21001714973884e-11
+    },
+    "early_stopping": {
+      "patience": 10
+    },
+    "device_setting": {
+      "device": "cuda",
+      "visible_device_list": "0",
+      "num_workers": 10
+    },
+    "checkpoint": {
+      "dir": "checkpoint"
+    }
+  },
+  "test": {
+    "results": {
+      "dir": "results"
+    }
+
+  },
+  "vocab": {
+    "dir": "vocab"
+  },
+  "logging": {
+    "use_mongo": true,
+    "dir": "logs",
+    "log": {
+      "mongo_host": "localhost",
+      "mongo_port": 27017,
+      "mongo_db": "sacred"
+    }
+  },
+  "logger": {
+    "level": "info",
+    "dir": "log"
+  }
+}
+
